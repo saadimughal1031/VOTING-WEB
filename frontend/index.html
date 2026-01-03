@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Online Voting System</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="navrow">
+        <div class="brand">
+          <div class="brand-badge">🗳️</div>
+          <div>
+            <h1>Online Voting System</h1>
+            <small>Secure • Transparent • Government-Style Portal</small>
+          </div>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="register.html">Voter Registration</a>
+        <a href="login.html">Voter Login</a>
+        <a href="vote.html">Cast Vote</a>
+        <a href="results.html">Results</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="card">
+        <div class="card-header">
+          <h2>National E-Voting Portal</h2>
+          <p>
+            This portal supports multiple elections. Voters authenticate with CNIC and can vote for
+            a party and candidate. Results are visible only after election ends.
+          </p>
+        </div>
+        <div class="card-body">
+          <div class="actions">
+            <a class="btn btn-accent" href="register.html">Register as Voter</a>
+            <a class="btn btn-primary" href="login.html">Login to Vote</a>
+            <a class="btn btn-ghost" href="admin_login.html">Admin Login</a>
+          </div>
+
+          <div class="kpi">
+            <div class="mini">
+              <b>CNIC Based Login</b>
+              <span>Format: 12345-1234567-1</span>
+            </div>
+            <div class="mini">
+              <b>One Voter, One Vote</b>
+              <span>Backend validation enforced</span>
+            </div>
+            <div class="mini">
+              <b>Secure Results</b>
+              <span>Visible after election ends</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Quick Links</h2>
+          <p>Use these shortcuts to navigate quickly.</p>
+        </div>
+        <div class="card-body">
+          <div class="actions">
+            <a class="btn btn-primary" href="vote.html">Cast Vote</a>
+            <a class="btn btn-ghost" href="results.html">View Results</a>
+          </div>
+          <p class="helper" style="margin-top:12px;">
+            Note: Voting page requires a valid voter CNIC and active election.
+          </p>
+        </div>
+      </div>
+    </section>
+
+   <div class="foot"> <p class="footer">© 2025 Online Voting System </p></div>
+  </main>
+
+</body>
+</html>

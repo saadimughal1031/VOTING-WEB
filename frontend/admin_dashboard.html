@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">⚙️</div>
+        <div>
+          <h1>Admin Dashboard</h1>
+          <small>Election Management Console</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="register.html">Voter Registration</a>
+        <a href="login.html">Voter Login</a>
+        <a href="vote.html">Cast Vote</a>
+        <a href="results.html">Results</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="adminDash">
+    <section class="card">
+      <div class="card-header">
+        <div class="admin-header">
+          <div class="admin-info">
+            <div id="adminInfoDisplay"></div>
+          </div>
+          <div class="btn-group">
+            <a href="change_credentials.html" class="btn btn-accent">Change Credentials</a>
+            <button id="logoutBtn" class="btn btn-ghost" type="button">Logout</button>
+          </div>
+        </div>
+        <h2>Administration Panel</h2>
+        <p>Create elections, add parties/candidates, register voters, start/stop elections, view results after end, and reset elections.</p>
+      </div>
+
+      <div class="card-body">
+        <div class="grid-2">
+          <div class="card" style="box-shadow:none;">
+            <div class="card-body">
+              <h3 style="margin:0 0 10px;">Election Controls</h3>
+              <div class="actions" style="flex-direction: column; align-items: stretch;">
+                <a href="create_election.html" class="btn btn-primary" style="text-align: center; text-decoration: none;">Create Election</a>
+                <a href="start_election.html" class="btn btn-ghost" style="text-align: center; text-decoration: none;">Start Election</a>
+                <a href="stop_election.html" class="btn btn-ghost" style="text-align: center; text-decoration: none;">Stop Election</a>
+                <a href="manage_elections.html" class="btn btn-accent" style="text-align: center; text-decoration: none;">Manage Elections</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="box-shadow:none;">
+            <div class="card-body">
+              <h3 style="margin:0 0 10px;">Main Election</h3>
+              <div class="actions" style="flex-direction: column; align-items: stretch;">
+                <a href="add_party.html" class="btn btn-ghost" style="text-align: center; text-decoration: none;">Add Party</a>
+                <a href="add_candidate.html" class="btn btn-ghost" style="text-align: center; text-decoration: none;">Add Candidate</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="box-shadow:none; margin-top:14px;">
+          <div class="card-body">
+            <h3 style="margin:0 0 10px;">Results & Reset</h3>
+            <div class="actions" style="flex-direction: column; align-items: stretch;">
+              <a class="btn btn-primary" href="results.html" style="text-align: center; text-decoration: none;">View Results (After End)</a>
+              <a href="reset_election.html" class="btn btn-accent" style="text-align: center; text-decoration: none;">Reset Election</a>
+            </div>
+            <p class="helper">Admin cannot view results during election — backend must enforce rule.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+</html>

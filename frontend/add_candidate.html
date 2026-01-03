@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Candidate</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">👤</div>
+        <div>
+          <h1>Add Candidate</h1>
+          <small>Administration Panel</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header">
+        <a href="admin_dashboard.html" class="back-btn">← Back to Dashboard</a>
+        <h2>Add Candidates</h2>
+        <p>Add multiple candidates to an election. Each candidate requires a name, party selection, and optional photo.</p>
+      </div>
+
+      <div class="card-body">
+        <div id="addCandidateMsg" class="alert" hidden></div>
+
+        <form id="addCandidateForm" class="form">
+          <div class="field">
+            <label for="candidateElectionSelect">Select Election</label>
+            <select id="candidateElectionSelect" required>
+              <option value="">Loading elections...</option>
+            </select>
+          </div>
+
+          <div id="candidateBlocks">
+            <!-- Candidate blocks will be added here dynamically -->
+          </div>
+
+          <div class="actions" style="margin-top: 16px;">
+            <button type="button" id="addCandidateBlockBtn" class="btn btn-ghost">+ Add Another Candidate</button>
+          </div>
+
+          <div class="actions" style="margin-top: 20px;">
+            <button class="btn btn-primary" type="submit">Submit All Candidates</button>
+            <a class="btn btn-ghost" href="admin_dashboard.html">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+</html>
+

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Start Election</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">▶️</div>
+        <div>
+          <h1>Start Election</h1>
+          <small>Administration Panel</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header">
+        <a href="admin_dashboard.html" class="back-btn">← Back to Dashboard</a>
+        <h2>Start Election</h2>
+        <p>Select an election and start it. Once started, voters can cast their votes.</p>
+      </div>
+
+      <div class="card-body">
+        <div id="startElectionMsg" class="alert" hidden></div>
+
+        <form id="startElectionForm" class="form">
+          <div class="field">
+            <label for="startElectionSelect">Select Election</label>
+            <select id="startElectionSelect" required>
+              <option value="">Loading elections...</option>
+            </select>
+            <div class="helper">Only elections with status CREATED or ENDED can be started</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Start Election</button>
+            <a class="btn btn-ghost" href="admin_dashboard.html">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+</html>
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Results</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">📊</div>
+        <div>
+          <h1>Election Results</h1>
+          <small>Visible after election ends</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="register.html">Voter Registration</a>
+        <a href="login.html">Voter Login</a>
+        <a href="vote.html">Cast Vote</a>
+        <a href="results.html">Results</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header">
+        <h2>Results Dashboard</h2>
+        <p>Select election and load results from backend API.</p>
+      </div>
+
+      <div class="card-body">
+        <div id="resultsMsg" class="alert" hidden></div>
+
+        <div class="results-controls">
+          <div class="field">
+            <label for="resultElection">Election</label>
+            <select id="resultElection">
+              <option value="">Loading ended elections...</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="loadResultsBtn" class="btn btn-primary" type="button">Load Results</button>
+          </div>
+        </div>
+        <div class="helper" style="margin-top:8px;">Only ended elections are shown here</div>
+
+        <div style="margin-top:14px;">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Party</th>
+                <th>Candidate</th>
+                <th>Total Votes</th>
+              </tr>
+            </thead>
+            <tbody id="resultsBody">
+              <tr>
+                <td colspan="3" style="color:#64748b;">Click "Load Results" to fetch from API.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="helper" style="margin-top:10px;">
+          Admin cannot view results during election (as per requirement). Backend should enforce this rule.
+        </p>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+
+</html>

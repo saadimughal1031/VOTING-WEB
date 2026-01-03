@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">🛡️</div>
+        <div>
+          <h1>Admin Login</h1>
+          <small>Authorized access only</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="register.html">Voter Registration</a>
+        <a href="login.html">Voter Login</a>
+        <a href="vote.html">Cast Vote</a>
+        <a href="results.html">Results</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header">
+        <h2>Admin Authentication</h2>
+        <p>Login using Admin ID and password to manage elections.</p>
+      </div>
+
+      <div class="card-body">
+        <div id="adminMsg" class="alert" hidden></div>
+
+        <form id="adminLoginForm" class="form">
+          <div class="grid-2">
+            <div class="field">
+              <label for="adminId">Admin ID</label>
+              <input id="adminId" type="text" placeholder="e.g., admin01" required />
+            </div>
+            <div class="field">
+              <label for="adminPass">Password</label>
+              <input id="adminPass" type="password" placeholder="••••••••" required />
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-primary" type="submit">Login</button>
+            <a class="btn btn-ghost" href="index.html">Back to Home</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+</html>

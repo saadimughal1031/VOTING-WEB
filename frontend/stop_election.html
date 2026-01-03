@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stop Election</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">⏸️</div>
+        <div>
+          <h1>Stop Election</h1>
+          <small>Administration Panel</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="admin_dashboard.html">Dashboard</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header">
+        <a href="admin_dashboard.html" class="back-btn">← Back to Dashboard</a>
+        <h2>Stop Election</h2>
+        <p>Select a running election and stop it. Once stopped, results will be available for viewing.</p>
+      </div>
+
+      <div class="card-body">
+        <div id="stopElectionMsg" class="alert" hidden></div>
+
+        <form id="stopElectionForm" class="form">
+          <div class="field">
+            <label for="stopElectionSelect">Select Election</label>
+            <select id="stopElectionSelect" required>
+              <option value="">Loading elections...</option>
+            </select>
+            <div class="helper">Only elections with status RUNNING can be stopped</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-accent" type="submit">Stop Election</button>
+            <a class="btn btn-ghost" href="admin_dashboard.html">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+</html>
+

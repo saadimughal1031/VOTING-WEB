@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Voter Registration</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="brand">
+        <div class="brand-badge">🧾</div>
+        <div>
+          <h1>Voter Registration</h1>
+          <small>Enter details to register for elections</small>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="register.html">Voter Registration</a>
+        <a href="login.html">Voter Login</a>
+        <a href="vote.html">Cast Vote</a>
+        <a href="results.html">Results</a>
+        <span class="nav-spacer"></span>
+        <a href="admin_login.html" class="admin-nav">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-header">
+        <h2>Registration Form</h2>
+        <p>Please provide accurate CNIC information. Profile picture is optional (backend can be extended).</p>
+      </div>
+
+      <div class="card-body">
+        <div id="regMsg" class="alert" hidden></div>
+
+        <form id="registerForm" class="form">
+          <div class="grid-2">
+            <div class="field">
+              <label for="fullName">Full Name</label>
+              <input id="fullName" type="text" placeholder="e.g., Ali Ahmed" required />
+            </div>
+
+            <div class="field">
+              <label for="fatherName">Father Name</label>
+              <input id="fatherName" type="text" placeholder="e.g., Ahmed Khan" required />
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="regCNIC">CNIC</label>
+              <input id="regCNIC" type="text" placeholder="12345-1234567-1"
+                      />
+              <div class="helper">CNIC format: 33100-0000000-1</div>
+            </div>
+
+            <div class="field">
+              <label for="address">Address</label>
+              <input id="address" type="text" placeholder="House #, Street, City" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="profilePic">Profile Picture</label>
+            <input id="profilePic" type="file" accept="image/*" />
+            <img id="picPreview" alt="Preview" hidden
+                 style="margin-top:10px; max-width:160px; border-radius:14px; border:1px solid rgba(15,23,42,.12);" />
+            <div class="helper">Optional: Only preview on frontend. Backend can store image later.</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-accent" type="submit">Register</button>
+            <a class="btn btn-ghost" href="login.html">Already User? Login Here</a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <p class="footer">© 2025 Online Voting System </p>
+  </main>
+
+</body>
+</html>
