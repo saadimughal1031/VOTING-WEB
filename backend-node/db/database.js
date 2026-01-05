@@ -30,6 +30,7 @@ function initDb() {
             party_id TEXT, -- e.g. P1
             party_name TEXT NOT NULL,
             symbol_path TEXT,
+            active INTEGER DEFAULT 1,
             FOREIGN KEY(election_id) REFERENCES elections(id) ON DELETE CASCADE
         )`);
 
@@ -40,6 +41,7 @@ function initDb() {
             party_id TEXT, -- matches parties.party_id
             name TEXT NOT NULL,
             image_path TEXT,
+            active INTEGER DEFAULT 1,
             FOREIGN KEY(election_id) REFERENCES elections(id) ON DELETE CASCADE
         )`);
 
@@ -71,6 +73,18 @@ function initDb() {
             admin_id TEXT PRIMARY KEY,
             password TEXT NOT NULL
         )`);
+
+        // Migrations
+        db.run("ALTER TABLE parties ADD COLUMN active INTEGER DEFAULT 1", (err) => {
+            if (err && !err.message.includes("duplicate column name")) {
+                console.log("Migration (Parties):", err.message);
+            }
+        });
+        db.run("ALTER TABLE candidates ADD COLUMN active INTEGER DEFAULT 1", (err) => {
+            if (err && !err.message.includes("duplicate column name")) {
+                console.log("Migration (Candidates):", err.message);
+            }
+        });
 
         // Seed default admin
         db.get("SELECT * FROM admins WHERE admin_id = 'admin'", [], (err, row) => {

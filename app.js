@@ -3,8 +3,21 @@
    Shared JS for all pages
    ========================= */
 
-// API Base URL - Change this if your server runs on a different host/port
-const API_BASE = "http://localhost:8080/api"; // Node.js Express API base
+// API Base URL - Automatically detects environment
+const hostname = window.location.hostname;
+const protocol = window.location.protocol;
+const isLocal = !hostname ||
+  hostname === 'localhost' ||
+  hostname === '127.0.0.1' ||
+  hostname.startsWith('192.168.') ||
+  hostname.startsWith('10.') ||
+  protocol === 'file:';
+
+// For local development, we hit the backend directly on port 8080
+// In production (Vercel), we use the relative /api path
+const API_BASE = isLocal
+  ? "http://localhost:8080/api"
+  : "/api";
 
 function $(sel) { return document.querySelector(sel); }
 function $all(sel) { return [...document.querySelectorAll(sel)]; }
@@ -45,22 +58,20 @@ function hideMsg(id) {
 }
 
 async function postJSON(url, data) {
-  // Debug: Log JSON payload (remove in production)
-  console.log("POST JSON to", url, "payload:", data);
+  const token = localStorage.getItem("admin_token");
+  const headers = {
+    "Content-Type": "application/json"
+  };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
 
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: headers,
     body: JSON.stringify(data)
   });
-  const text = await res.text();
-  let json = null;
-  try { json = JSON.parse(text); } catch { /* ignore */ }
-  if (!res.ok) {
-    console.error("Request failed:", res.status, text);
-    throw new Error(json?.message || text || "Request failed");
-  }
-  return json ?? {};
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.message || "Request failed");
+  return json;
 }
 
 /* Page: Voter Login */
@@ -324,10 +335,13 @@ function initVote() {
     try {
       await postJSON(`${API_BASE}/vote/cast`, payload);
       showMsg("voteMsg", "Vote submitted successfully.", true);
-      // Optional: reset form or redirect
-      // setTimeout(()=> location.href="results.html", 1500);
+      // Success: Clear selection
+      document.querySelectorAll(".select-card.selected").forEach(el => el.classList.remove("selected"));
+      $("#party").value = "";
+      $("#candidate").value = "";
     } catch (err) {
       console.error("Cast Vote error:", err);
+      // Special handling for already voted or not registered
       showMsg("voteMsg", err.message || "Vote failed", false);
     }
   });
@@ -1301,14 +1315,18 @@ function renderElectionsTable(elections) {
         <td>${election.vote_count || 0}</td>
         <td>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-            <button class="btn btn-ghost" style="padding: 4px 8px; font-size: 12px;" 
+            <button class="btn btn-primary" style="padding: 4px 8px; font-size: 11px;" 
+                    onclick="viewRoster(${election.id}, '${(election.name || "").replace(/'/g, "\\'")}')">
+              Details
+            </button>
+            <button class="btn btn-ghost" style="padding: 4px 8px; font-size: 11px;" 
                     onclick="openEditModal(${election.id}, '${(election.name || "").replace(/'/g, "\\'")}')"
                     ${!canEdit ? "disabled title='Cannot edit RUNNING elections'" : ""}>
-              Edit
+              Rename
             </button>
-            <button class="btn btn-ghost" style="padding: 4px 8px; font-size: 12px; color: #ef4444; border-color: #ef4444;" 
-                    onclick="deleteElection(${election.id}, '${(election.name || "").replace(/'/g, "\\'")}')"
-                    ${election.vote_count > 0 ? "disabled title='Cannot delete election with votes'" : ""}>
+            <button class="btn btn-ghost" style="padding: 4px 8px; font-size: 11px; color: #ef4444; border-color: #ef4444;" 
+            <button class="btn btn-ghost" style="padding: 4px 8px; font-size: 11px; color: #ef4444; border-color: #ef4444;" 
+                    onclick="deleteElection(${election.id}, '${(election.name || "").replace(/'/g, "\\'")}', ${election.vote_count})">
               Delete
             </button>
           </div>
@@ -1317,6 +1335,119 @@ function renderElectionsTable(elections) {
     `;
   }).join("");
 }
+
+async function viewRoster(electionId, electionName) {
+  // We'll use a modal to show details
+  const modal = $("#rosterModal");
+  if (!modal) {
+    // If modal doesn't exist, create it dynamically
+    const modalHtml = `
+      <div id="rosterModal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+          <div class="modal-header">
+            <h3>Roster: <span id="rosterElectionName"></span></h3>
+            <button class="modal-close" onclick="closeRosterModal()">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div id="rosterMsg" class="alert" hidden></div>
+            <div class="grid-2">
+              <div>
+                <h4>Parties</h4>
+                <div id="rosterParties"></div>
+              </div>
+              <div>
+                <h4>Candidates</h4>
+                <div id="rosterCandidates"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+  }
+
+  $("#rosterElectionName").textContent = electionName;
+  $("#rosterModal").style.display = "flex";
+  hideMsg("rosterMsg");
+  loadRosterData(electionId);
+}
+
+window.closeRosterModal = () => {
+  $("#rosterModal").style.display = "none";
+};
+
+async function loadRosterData(electionId) {
+  $("#rosterParties").innerHTML = "Loading...";
+  $("#rosterCandidates").innerHTML = "Loading...";
+
+  try {
+    const res = await fetch(`${API_BASE}/election/details?election_id=${electionId}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to load roster");
+
+    const { parties, candidates } = data.data;
+
+    $("#rosterParties").innerHTML = parties.map(p => `
+      <div class="list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #eee;">
+        <span><strong>${p.party_id}:</strong> ${p.party_name}</span>
+        <button class="btn btn-ghost" onclick="deleteParty(${p.id || 0}, '${p.party_name}', ${electionId})" 
+                style="padding: 2px 6px; font-size: 10px; color: #ef4444; border-color: #ef4444;">Delete</button>
+      </div>
+    `).join("") || "No parties";
+
+    $("#rosterCandidates").innerHTML = candidates.map(c => `
+      <div class="list-item" style="display: flex; justify-content: space-between; align-items: center; padding: 8px; border-bottom: 1px solid #eee;">
+        <span>${c.name} (${c.party})</span>
+        <button class="btn btn-ghost" onclick="deleteCandidate(${c.id}, '${c.name}', ${electionId})" 
+                style="padding: 2px 6px; font-size: 10px; color: #ef4444; border-color: #ef4444;">Delete</button>
+      </div>
+    `).join("") || "No candidates";
+
+  } catch (err) {
+    showMsg("rosterMsg", err.message, false);
+  }
+}
+
+async function deleteParty(id, name, electionId) {
+  if (!confirm(`Delete party "${name}"?`)) return;
+  try {
+    const token = localStorage.getItem("admin_token");
+    const res = await fetch(`${API_BASE}/admin/party/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to delete party");
+    showMsg("rosterMsg", "Party removed", true);
+    loadRosterData(electionId);
+    loadElectionsTable(); // Update counts in main table
+  } catch (err) {
+    showMsg("rosterMsg", err.message, false);
+  }
+}
+
+async function deleteCandidate(id, name, electionId) {
+  if (!confirm(`Delete candidate "${name}"?`)) return;
+  try {
+    const token = localStorage.getItem("admin_token");
+    const res = await fetch(`${API_BASE}/admin/candidate/${id}`, {
+      method: "DELETE",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to delete candidate");
+    showMsg("rosterMsg", "Candidate removed", true);
+    loadRosterData(electionId);
+    loadElectionsTable();
+  } catch (err) {
+    showMsg("rosterMsg", err.message, false);
+  }
+}
+
+window.viewRoster = viewRoster;
+window.deleteParty = deleteParty;
+window.deleteCandidate = deleteCandidate;
 
 function filterElectionsTable(searchTerm) {
   const filtered = allElectionsData.filter(election => {
@@ -1340,8 +1471,13 @@ function closeEditModal() {
   hideMsg("editElectionMsg");
 }
 
-async function deleteElection(election_id, election_name) {
-  if (!confirm(`⚠️ Are you sure you want to delete "${election_name}"?\n\nThis will permanently delete the election, all parties, candidates, and votes associated with it.\n\nThis action cannot be undone!`)) {
+async function deleteElection(election_id, election_name, vote_count) {
+  if (vote_count > 0) {
+    alert(`Cannot delete "${election_name}" because it already has ${vote_count} votes. You must reset the election first if you want to remove it.`);
+    return;
+  }
+
+  if (!confirm(`⚠️ Are you sure you want to delete "${election_name}"?\n\nThis will permanently delete the election and all associated data.\n\nThis action cannot be undone!`)) {
     return;
   }
 
